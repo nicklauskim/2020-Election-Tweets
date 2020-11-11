@@ -10,8 +10,8 @@ Created on Fri Oct 30 18:18:39 2020
 
 # Import libraries
 import os
-import json
 import csv
+from datetime import datetime
 import tweepy as tw
 
 
@@ -37,7 +37,7 @@ api = tw.API(auth, wait_on_rate_limit = True, wait_on_rate_limit_notify= True, c
 
 
 
-# Create a class to make API call + scrape data - better design
+# TO DO: Create a class to make API call + scrape data - better design
 
 
 
@@ -49,7 +49,7 @@ num_tweets = 10000
 
 
 # Search for tweets
-tweets = tw.Cursor(api.search, q = search_terms, tweet_mode = 'extended', lang = 'en', since = start_date).items(num_tweets)
+tweets = tw.Cursor(api.search, q = search_terms, tweet_mode = 'extended', lang = 'en', since = start_date)
 #tweets_json = [tweet._json for tweet in tweets]
 
 
@@ -71,7 +71,11 @@ for tweet in tweets:
         'user_screen_name': tweet.user.screen_name,
         'user_desc': tweet.user.description,
         'user_location': tweet.user.location,
+        'user_join_date': tweet.user.created_at,
+        'user_followers_count': tweet.user.followers_count,
         'user_statuses_count': tweet.user.statuses_count,
+        'source': tweet.source,
+        'time_collected': datetime.now()
     }
     
     data.append(attributes)
@@ -80,7 +84,7 @@ for tweet in tweets:
     
 # Write compiled data to csv file
 keys = data[0].keys()
-with open('./data/raw/election_tweets.csv', 'wt', newline='')  as f:
+with open('./data/raw/election_day_tweets.csv', 'wt', newline='')  as f:
     dict_writer = csv.DictWriter(f, keys)
     dict_writer.writeheader()
     dict_writer.writerows(data)    
