@@ -7,13 +7,11 @@ Created on Fri Oct 30 18:18:39 2020
 """
 
 
-
 # Import libraries
 import os
 import csv
 from datetime import datetime
 import tweepy as tw
-
 
 
 # Declare API credentials: Keys and Access Tokens
@@ -23,12 +21,10 @@ consumer_key = 'nAYZQZf9CN5acPI6mVesqapH1'
 consumer_secret = 'qGyuafUqLkvQWIabmrAyjJb57MskmDJ1QDdhOVdijlTDuzR2jt'
 
 
-
 # Access the Twitter API via Tweepy
 auth = tw.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 api = tw.API(auth, wait_on_rate_limit = True, wait_on_rate_limit_notify= True, compression = False)
-
 
 
 # Run a quick test to make sure everything's working by posting a tweet
@@ -36,9 +32,7 @@ api = tw.API(auth, wait_on_rate_limit = True, wait_on_rate_limit_notify= True, c
 #print("Tweet posted!\n")
 
 
-
-# TO DO: Create a class to make API call + scrape data - better design
-
+# TO DO: Create a class to make API call + scrape data - potentially better design
 
 
 # Set search parameters
@@ -47,13 +41,9 @@ start_date = '2020-10-22'
 num_tweets = 10000
 
 
-
 # Search for tweets
 tweets = tw.Cursor(api.search, q = search_terms, tweet_mode = 'extended', lang = 'en', since = start_date)
 #tweets_json = [tweet._json for tweet in tweets]
-
-
-# Add "countdown" for when the rate limit is reached and need to sleep?
 
 
 # Create data from tweet search results
@@ -79,8 +69,7 @@ for tweet in tweets:
     }
     
     data.append(attributes)
-    
-    
+       
     
 # Write compiled data to csv file
 keys = data[0].keys()
@@ -89,7 +78,5 @@ with open('./data/raw/election_day_tweets.csv', 'wt', newline='')  as f:
     dict_writer.writeheader()
     dict_writer.writerows(data)    
 
-    
-    
-    
+     
     
